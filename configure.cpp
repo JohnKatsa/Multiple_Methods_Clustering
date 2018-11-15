@@ -54,7 +54,7 @@ dataset* read_inputFile(char* inputFile, int* ret){
   FILE* fptr = fopen(inputFile,"r");
 
   size_t len = 0;
-  char* buffer;
+  char* buffer = NULL;
   char delimeters[5] = " ,\t\n";
 
   // calculate number of inputs
@@ -75,7 +75,8 @@ dataset* read_inputFile(char* inputFile, int* ret){
   int i = 0;  // used for dataset array
   int j = 0;  // used for data point array
   type* tmp;
-  while (getline(&buffer,&len,fptr) != -1){
+  cout.precision(20);
+  while(getline(&buffer,&len,fptr) != -1){
     char* token = strtok(buffer,delimeters);
 
     // set id and data points
@@ -91,6 +92,7 @@ dataset* read_inputFile(char* inputFile, int* ret){
 
     // new loop initialization
     delete[] buffer;
+    buffer = NULL;
     len = 0;
     j = 0;
     i++;

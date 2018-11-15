@@ -12,7 +12,7 @@
 #include "cluster.h"
 #include "data.h"
 
-#define VECTORSIZE 128
+#define VECTORSIZE 204
 
 class dataset;
 
