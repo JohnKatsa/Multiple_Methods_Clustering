@@ -1,7 +1,7 @@
 all: cluster
 
-cluster : ./obj/cluster.o ./obj/configure.o ./obj/data.o ./obj/random_init.o ./obj/kmeanspp_init.o ./obj/lsh_item.o ./obj/lsh_bucket.o ./obj/lsh_hashtable.o ./obj/lsh.o ./obj/cube.o ./obj/lloyd_assign.o ./obj/nearest_neighbour.o ./obj/kmeans_update.o ./obj/pam_lloyd_update.o
-	@g++ -std=c++11 -o cluster ./obj/cluster.o ./obj/configure.o ./obj/data.o ./obj/random_init.o ./obj/kmeanspp_init.o ./obj/lsh_item.o ./obj/lsh_bucket.o ./obj/lsh_hashtable.o ./obj/lsh.o ./obj/cube.o ./obj/lloyd_assign.o ./obj/nearest_neighbour.o ./obj/kmeans_update.o ./obj/pam_lloyd_update.o -lm -g
+cluster : ./obj/cluster.o ./obj/configure.o ./obj/data.o ./obj/random_init.o ./obj/kmeanspp_init.o ./obj/lsh_item.o ./obj/lsh_bucket.o ./obj/lsh_hashtable.o ./obj/lsh.o ./obj/cube.o ./obj/lloyd_assign.o ./obj/nearest_neighbour.o ./obj/kmeans_update.o ./obj/pam_lloyd_update.o ./obj/silhouette.o
+	@g++ -std=c++11 -o cluster ./obj/cluster.o ./obj/configure.o ./obj/data.o ./obj/random_init.o ./obj/kmeanspp_init.o ./obj/lsh_item.o ./obj/lsh_bucket.o ./obj/lsh_hashtable.o ./obj/lsh.o ./obj/cube.o ./obj/lloyd_assign.o ./obj/nearest_neighbour.o ./obj/kmeans_update.o ./obj/pam_lloyd_update.o ./obj/silhouette.o -lm -g
 	@echo "Clustering ready for use!"
 
 ./obj/cluster.o : ./clustering/cluster.cpp ./clustering/cluster.h
@@ -49,7 +49,12 @@ cluster : ./obj/cluster.o ./obj/configure.o ./obj/data.o ./obj/random_init.o ./o
 
 ./obj/pam_lloyd_update.o : ./update/PAM_a_la_Lloyd/pam_lloyd_update.cpp ./update/PAM_a_la_Lloyd/pam_lloyd_update.h
 	@g++ -std=c++11 -c ./update/PAM_a_la_Lloyd/pam_lloyd_update.cpp -o ./obj/pam_lloyd_update.o
+	@echo "Installing Silhouette Modules. . ."
+
+./obj/silhouette.o : ./clustering/silhouette.cpp ./clustering/silhouette.h
+	@g++ -std=c++11 -c ./clustering/silhouette.cpp -o ./obj/silhouette.o
 	@echo "Finalizing Clustering. . ."
 
 clean :
-	@rm cluster ./obj/cluster.o ./obj/configure.o ./obj/data.o ./obj/random_init.o ./obj/kmeanspp_init.o ./obj/lsh.o ./obj/cube.o ./obj/lsh_item.o ./obj/lsh_bucket.o ./obj/lsh_hashtable.o ./obj/lloyd_assign.o ./obj/nearest_neighbour.o ./obj/kmeans_update.o ./obj/pam_lloyd_update.o
+	@rm cluster
+	@rm -rf ./obj/*
