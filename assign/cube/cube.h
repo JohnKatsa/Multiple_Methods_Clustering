@@ -10,6 +10,6 @@
 
 class dataset;
 
-hashtable** cube_main(dataset* data, std::string family);
+hashtable** cube_main(dataset* data, int k, std::string family);
 
 #endif

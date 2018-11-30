@@ -29,7 +29,7 @@ typedef struct euclidean_return{
 } euclidean_return;
 
 // general function
-hashtable** lsh_main(dataset* data, string family);
+hashtable** lsh_main(dataset* data, int k, int L, string family);
 // initialize hashtable buckets to empty
 hashtable* initialize_buckets(int tablesize, hashtable* table);
 // convert number to bitset

@@ -9,12 +9,11 @@
 #include <set>
 #include <iterator>
 #include <random>
-#include <math.h>
 #include "../../clustering/cluster.h"
 
 class dataset;
 
-float distance(type* point1, type* point2, std::string metric);
+double distance(type* point1, type* point2, std::string metric);
 dataset** k_means_plus_plus(dataset* data, int k, int n, std::string metric);
 
 #endif

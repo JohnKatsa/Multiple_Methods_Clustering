@@ -4,7 +4,7 @@
 
 using namespace std;
 
-float distance(type* point1, type* point2, string metric){
+double distance(type* point1, type* point2, string metric){
 
   if(!metric.compare("cosine")){
     int i;
@@ -15,15 +15,14 @@ float distance(type* point1, type* point2, string metric){
       normy += point2[i]*point2[i];
     }
     return xy/(sqrt(normx)*sqrt(normy));
-
   }
   else{
     int i;
-    type distance2 = 0;
+    double distance2 = 0.0;
     for(i = 0; i < VECTORSIZE; i++){
-      distance2 += pow(point1[i]-point2[i],2);
+      distance2 += (point1[i]-point2[i])*(point1[i]-point2[i]);
     }
-     return sqrt(distance2);
+     return (double)sqrt(distance2);
   }
 
 }
@@ -49,13 +48,13 @@ dataset** k_means_plus_plus(dataset* data, int k, int n, string metric)
   }
 
   // used to store data points probabilities and distances
-  float probs[n];
-  float distances[n];
+  double probs[n];
+  double distances[n];
 
   int i = 1;
   int min;
-  float mindistance;
-  float dist;
+  double mindistance;
+  double dist;
   while(i < k){
 
     // For every data-centers
@@ -63,7 +62,7 @@ dataset** k_means_plus_plus(dataset* data, int k, int n, string metric)
       mindistance = 1000000;
       //For every center
       for(itr_centers = centers_set.begin(); itr_centers != centers_set.end(); itr_centers++){
-        dist = distance(data[*itr_centers].get_xij(),data[*itr_data].get_xij(),metric);
+        dist = insert_distance_in_map(&data[*itr_centers],&data[*itr_data],metric);
         if(dist < mindistance){
           mindistance = dist;
           min = *itr_centers;
@@ -74,7 +73,7 @@ dataset** k_means_plus_plus(dataset* data, int k, int n, string metric)
     }
 
     // set all probabilities
-    float sum = 0;
+    double sum = 0;
     for(itr_data = data_set.begin(); itr_data != data_set.end(); ++itr_data)
       sum += pow(distances[*itr_data],2);
     for(itr_data = data_set.begin(); itr_data != data_set.end(); ++itr_data)
@@ -84,9 +83,9 @@ dataset** k_means_plus_plus(dataset* data, int k, int n, string metric)
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<> dis(0.0, 1.0);
-    float p = dis(gen);
+    double p = dis(gen);
 
-    float b = 0; // limits to result possibility
+    double b = 0; // limits to result possibility
     for(itr_data = data_set.begin(); itr_data != data_set.end(); ++itr_data){
       b += probs[*itr_data];
       // found new center

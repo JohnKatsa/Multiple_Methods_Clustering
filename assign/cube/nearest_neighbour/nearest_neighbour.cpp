@@ -8,12 +8,13 @@ list<int> hamming_distance_on_random_bit(list<int> l, int* x){
   return l;
 }
 
-dataset* find_neighbours(dataset* data,hashtable t, dataset* query, int d, string family, float range, int* g, float* new_min, int k, int flag, char* outputFile){
+dataset* find_neighbours(dataset* data, hashtable t, dataset* query, int d, string family, float range, int* g, int fi, int k, int flag, char* outputFile){
   int M = 1;
   bucket* b = t.get_bucket()->get_bucket();
   type* p;
   int* g_bucket;
   type* point = query->get_xij();
+  float f;
 
   while(b != NULL){
     p = b->get_point()->get_p();
@@ -26,9 +27,15 @@ dataset* find_neighbours(dataset* data,hashtable t, dataset* query, int d, strin
       }
     }
 
-    if(distance(p,point,family) <= range){
+    f = distance(p,point,family);
+    if(f <= range){
       // for the LSH - nearest neighbours
-      data[b->get_point()->get_index()].set_center(query);
+      if((mapping[b->get_point()->get_index()] &&
+        (distance(data[b->get_point()->get_index()].get_center()->get_xij(),p,family) > f)) ||
+         !mapping[b->get_point()->get_index()]){  // because if the new is smaller or no old then change
+        data[b->get_point()->get_index()].set_center(query);
+        mapping[b->get_point()->get_index()] = 1;
+      }
     }
 
     b = b->get_bucket();
@@ -70,7 +77,7 @@ dataset* nearest_neighbours(dataset* data, dataset* query, int k, int d, int L, 
       probes = 1;
 
     // first probe (original)
-    data = find_neighbours(data,table[i][fi],query,d,family,range,g,&new_min,k,flag,outputFile);
+    data = find_neighbours(data,table[i][fi%tablesize],query,d,family,range,g,fi,k,flag,outputFile);
     int ham = 1;
     // for every probe find min (works for both lsh and cube)
     for(int z = 0; z < probes; z++){
@@ -80,7 +87,7 @@ dataset* nearest_neighbours(dataset* data, dataset* query, int k, int d, int L, 
         l = hamming_distance_on_random_bit(l,&ham);
       }
 
-      data = find_neighbours(data,table[i][ham],query,d,family,range,g,&new_min,k,flag,outputFile);
+      data = find_neighbours(data,table[i][ham%tablesize],query,d,family,range,g,ham,k,flag,outputFile);
     }
   }
 

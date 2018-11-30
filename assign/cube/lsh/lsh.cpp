@@ -8,8 +8,7 @@ float** v;
 int tablesize;
 int n;
 
-hashtable** lsh_main(dataset* data, string family){
- int k = 4, L = 5;
+hashtable** lsh_main(dataset* data, int k, int L, string family){
 
  srand(time(NULL));  // only once
  // initialize lsh constants
@@ -39,16 +38,9 @@ hashtable** lsh_main(dataset* data, string family){
    }
  }
 
- float R = 200;
-
  // make hashtables
  hashtable** table = fill_hashtables(VECTORSIZE,k,L,data,family,0);
  return table;
- //////////////////////////////////////////////////////////////////////////////
- /*ΠΡΕΠΕΙ ΝΑ ΚΑΛΕΙΤΑΙ Ο NEAREST NEIGHBOUR ΚΑΙ ΝΑ ΑΛΛΑΖΕΙ ΤΟ DATASET.CENTER_ID*/
- //////////////////////////////////////////////////////////////////////////////
-
- //nearest_neighbours(query,k,d,L,table,family,R,0,outputFile);   // LSH-neighnour,LSH-R-neighbours
 }
 
 hashtable* initialize_buckets(int tablesize, hashtable* table){
@@ -100,7 +92,7 @@ euclidean_return euclidean(int k, int d, type* p, int flag, int thesis){
 
   // return the appropriate euclidean struct
   ret.g = h;
-  
+
   if(flag){
     ret.fi = std::stoi(make_bit_string(convert_uniformly(h,k),k), nullptr, 2)%tablesize;
   }

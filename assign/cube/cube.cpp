@@ -2,8 +2,8 @@
 
 #include "cube.h"
 
-hashtable** cube_main(dataset* data, string family){
- int k = 4, L = 1;
+hashtable** cube_main(dataset* data, int k, string family){
+ int L = 1;
 
  srand(time(NULL));  // only once
  // initialize lsh constants
@@ -33,15 +33,7 @@ hashtable** cube_main(dataset* data, string family){
    }
  }
 
- float R = 200;
-
  // make hashtables
  hashtable** table = fill_hashtables(VECTORSIZE,k,L,data,family,1);
  return table;
-
- //////////////////////////////////////////////////////////////////////////////
- /*ΠΡΕΠΕΙ ΝΑ ΚΑΛΕΙΤΑΙ Ο NEAREST NEIGHBOUR ΚΑΙ ΝΑ ΑΛΛΑΖΕΙ ΤΟ DATASET.CENTER_ID*/
- //////////////////////////////////////////////////////////////////////////////
-
- //nearest_neighbours(query,k,d,L,table,family,R,0,outputFile);   // LSH-neighnour,LSH-R-neighbours
 }

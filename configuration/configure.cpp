@@ -6,11 +6,11 @@ using namespace std;
 
 // function to read arguments from command line
 void read_arguments(int argc, char** argv,
-  char** inputFile, char** configurationFile, char** outputFile, char** metric){
+  char** inputFile, char** configurationFile, char** outputFile, char** metric, char** style){
 
   int opt;
 
-  while ((opt = getopt (argc, argv, "i:c:o:d:")) != -1)
+  while ((opt = getopt (argc, argv, "i:c:o:d:a:")) != -1)
   {
     switch (opt){
       case 'i':
@@ -45,6 +45,12 @@ void read_arguments(int argc, char** argv,
         }
         else
           cout << "No metric given " << endl;
+      case 'a':
+        if(optarg){
+          *style = optarg;
+          cout << "Style: " << *style << endl;
+          break;
+        }
     }
   }
 }
@@ -75,7 +81,7 @@ dataset* read_inputFile(char* inputFile, int* ret){
   int i = 0;  // used for dataset array
   int j = 0;  // used for data point array
   type* tmp;
-  cout.precision(20);
+  cout.precision(30);
   while(getline(&buffer,&len,fptr) != -1){
     char* token = strtok(buffer,delimeters);
 
@@ -84,6 +90,7 @@ dataset* read_inputFile(char* inputFile, int* ret){
     tmp = new type[VECTORSIZE];
     input[i].set_xij(tmp);
 
+    token = strtok(NULL, delimeters);
     while(token != NULL){
       tmp[j] = atof(token);
       token = strtok(NULL, delimeters);

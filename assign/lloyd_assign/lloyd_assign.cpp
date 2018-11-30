@@ -5,10 +5,10 @@
 using namespace std;
 
 // returns index of min value
-int find_min(float* list, int k)
+int find_min(double* list, int k)
 {
   int min = 0;
-  float minval = list[0];
+  double minval = list[0];
   for(int i = 1; i < k; i++)
     if(list[i] < minval){
       min = i;
@@ -21,13 +21,20 @@ int find_min(float* list, int k)
 dataset* lloyd(dataset* data, dataset** centers, int n, int k, string metric)
 {
   // stores all distances to calculate min
-  float* test = new float[k];
+  double test[k] = {0};
 
   for(int i = 0; i < n; i++){
     // calculate distances from all centers
-    for(int j = 0; j < k; j++)
-      test[j] = distance(data[i].get_xij(),centers[j]->get_xij(),metric);
+    for(int j = 0; j < k; j++){
+      test[j] = insert_distance_in_map(&data[i],centers[j],metric);
+      //cout << "LLOYD: " << data[i].get_id() << " " << test[j] << " " << centers[j]->get_id() << "  ";
+    }
+    //cout << "\n\n";
 
+    //cout << "!! " << i << " " << find_min(test,k) << endl;
+    //for(int j = 0; j < k; j++)
+    //  cout << test[j] << " ";
+    //cout << endl;
     data[i].set_center(centers[find_min(test,k)]);
   }
 
