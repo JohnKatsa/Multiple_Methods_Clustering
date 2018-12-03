@@ -6,11 +6,11 @@ using namespace std;
 
 // function to read arguments from command line
 void read_arguments(int argc, char** argv,
-  char** inputFile, char** configurationFile, char** outputFile, char** metric, char** style){
+  char** inputFile, char** configurationFile, char** outputFile, char** metric, char** style, bool* complete){
 
   int opt;
 
-  while ((opt = getopt (argc, argv, "i:c:o:d:a:")) != -1)
+  while ((opt = getopt (argc, argv, "i:c:o:d:a:C:")) != -1)
   {
     switch (opt){
       case 'i':
@@ -49,6 +49,12 @@ void read_arguments(int argc, char** argv,
         if(optarg){
           *style = optarg;
           cout << "Style: " << *style << endl;
+          break;
+        }
+      case 'C':
+        if(optarg){
+          *complete = optarg;
+          cout << "Complete: " << *complete << endl;
           break;
         }
     }

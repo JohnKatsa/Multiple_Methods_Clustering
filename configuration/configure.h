@@ -17,7 +17,7 @@
 class dataset;
 
 // get command line arguments
-void read_arguments(int argc, char** argv, char** inputFile, char** configurationFile, char** outputFile, char** metric, char** style);
+void read_arguments(int argc, char** argv, char** inputFile, char** configurationFile, char** outputFile, char** metric, char** style, bool* complete);
 // read input file
 dataset* read_inputFile(char* inputFile, int* ret);
 // read configurations

@@ -15,7 +15,7 @@ int main(int args, char** argv)
 {
   // get command line arguments
   char *inputFile, *configurationFile, *outputFile, *metric, *style;
-  read_arguments(args,argv,&inputFile,&configurationFile,&outputFile,&metric,&style);
+  read_arguments(args,argv,&inputFile,&configurationFile,&outputFile,&metric,&style,&complete);
 
   // read input and make database
   dataset* data = read_inputFile(inputFile,&n);
@@ -24,13 +24,24 @@ int main(int args, char** argv)
   int clusters, hash_functions, hash_tables;
   configurate(configurationFile,&clusters,&hash_functions,&hash_tables);
 
+  // write initial output statistics
+  fstream fs;
+  fs.open(outputFile, fstream::in | fstream::out | fstream::app);
+  fs << "Algorithm: " << style[0] << "x" << style[1] << "x" << style[2] << endl;
+  fs << "Metric: " << metric << endl;
+  fs.close();
+
   const clock_t begin_time = clock();
 
   // Can you use map?
-  if(style[2] == '2')
+  if(style[2] == '2'){
     useMap = 1;
-  else
+    iskmeans = 0; // For safety :P
+  }
+  else{
     useMap = 0;   // For safety :P
+    iskmeans = 1;
+  }
 
   // INITIALIZE
   dataset** centers;
@@ -43,6 +54,9 @@ int main(int args, char** argv)
     sleep(1);
     return -1;
   }
+
+  for(int i = 0; i < clusters; i++)
+    centers[i]->set_center(centers[i]);
 
   for(int i = 0; i < clusters; i++)
     cout << centers[i]->get_id() << " ";
@@ -104,6 +118,7 @@ int main(int args, char** argv)
       return -1;
     }
 
+    // breaking case
     bool flag = 0;
     for(int kl = 0; kl < clusters; kl++)
       if(centers[kl] != newcenters[kl]){
@@ -112,24 +127,22 @@ int main(int args, char** argv)
       }
     if(!flag)
       break;
+    ////////////////
 
-    // EDW GINONTAI OI ELEGXOI TERMATISMOU (centers-newcenters)
     delete[] centers;
     centers = newcenters;
-    /////////////////////////////////////////////////////////////////
   }
 
-  for(int i = 0; i < n; i++)
-    cout << data[i].get_id() << " " << data[i].get_center()->get_id() << endl;
-
-  silhuette_whole(data,centers,clusters,metric);
+  silhuette_whole(data,centers,clusters,metric,outputFile);
 
   const clock_t end_time = clock();
   cout << ((end_time - begin_time)/CLOCKS_PER_SEC)/60 << " min(s) and "
        << ((end_time - begin_time)/CLOCKS_PER_SEC)%60 << " sec(s)" << endl;
 
   // clean up
-  clean_data(data,n);
+  clean_data(data,n);                     // delete dataset
+  if(style[1] == '1' || style[1] == '2')
+    delete_hashtables(table,L);           // delete hashtables if lsh or cube used
 
   return 0;
 }

@@ -44,5 +44,7 @@ int cosine_similarity(int k, int d, type* p);
 hashtable** fill_hashtables(int d, int k, int L, dataset* data, string family, int flag);
 // compare g functions (used in euclidean)
 int compare_g(int* g, int* g_bucket, int k);
+// delete hashtables
+void delete_hashtables(hashtable** table, int L);
 
 #endif

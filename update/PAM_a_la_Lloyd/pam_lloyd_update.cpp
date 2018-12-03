@@ -19,8 +19,13 @@ dataset** pam_lloyd_update(dataset* data, dataset** centers, int clusters, int n
 
   // make medoid pointers array
   dataset** medoids = new dataset*[clusters];
-  for(i = 0; i < clusters; i++) // loop to calculate medoids
-    medoids[i] = calculate_cluster_centroid(cluster_members[i],metric);
+  for(i = 0; i < clusters; i++){ // loop to calculate medoids
+    dataset* tmp;
+    if((tmp = calculate_cluster_centroid(cluster_members[i],metric)) == NULL) // no new center
+      medoids[i] = centers[i];
+    else
+      medoids[i] = tmp;
+  }
 
   delete[] cluster_members;
 
@@ -33,6 +38,9 @@ dataset* calculate_cluster_centroid(vector<dataset*> cluster, string metric)
 {
   double f, min = 100000000.0;
   dataset* minpoint;
+
+  if(cluster.size() == 0)
+    return NULL;
 
   for(int i = 0; i < cluster.size(); i++){
     f = objective_function(cluster[i],cluster,metric);

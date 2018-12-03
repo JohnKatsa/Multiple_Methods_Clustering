@@ -27,14 +27,7 @@ dataset* lloyd(dataset* data, dataset** centers, int n, int k, string metric)
     // calculate distances from all centers
     for(int j = 0; j < k; j++){
       test[j] = insert_distance_in_map(&data[i],centers[j],metric);
-      //cout << "LLOYD: " << data[i].get_id() << " " << test[j] << " " << centers[j]->get_id() << "  ";
     }
-    //cout << "\n\n";
-
-    //cout << "!! " << i << " " << find_min(test,k) << endl;
-    //for(int j = 0; j < k; j++)
-    //  cout << test[j] << " ";
-    //cout << endl;
     data[i].set_center(centers[find_min(test,k)]);
   }
 

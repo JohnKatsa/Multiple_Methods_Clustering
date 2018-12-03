@@ -207,3 +207,18 @@ int compare_g(int* g, int* g_bucket, int k){
       return 1;
   return 0;
 }
+
+void delete_hashtables(hashtable** table, int L){
+
+  for(int i = 0; i < L; i++){
+    bucket* b = table[i]->get_bucket();
+
+    bucket* previous;
+    while(b != NULL){
+      previous = b;
+      b = b->get_bucket();
+      delete previous;
+    }
+
+  }
+}
